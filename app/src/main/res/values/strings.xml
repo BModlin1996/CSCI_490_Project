@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">CSCI_490_Project</string>
+    <string name="title_activity_check_out_form">CheckOutForm</string>
 </resources>
