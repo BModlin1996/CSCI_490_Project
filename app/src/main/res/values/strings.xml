@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">CSCI_490_Project</string>
+    <string name="title_activity_check_out_form">CheckOutForm</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="label_make_payment">Make Payment</string>
+    <!--  Labels below are used in the CheckOutForm activity -->
+    <string name="nameFirst">First Name</string>
+    <string name="nameLast">Last Name</string>
+    <string name="email">Email Address</string>
+    <string name="billAddress">Billing Address</string>
+    <string name="cardInfoLabel">Card Information</string>
+    <string name="nameOnCard">Name on Card</string>
+    <string name="cardNumber">Card Number</string>
+    <string name="cardSecurityCode">Card Security Code CSC</string>
+    <string name="expireDate">Expiration Date</string>
+    <string name="submitButton">Submit</string>
+    <string name="cancelButton">Cancel</string>
+</resources>
