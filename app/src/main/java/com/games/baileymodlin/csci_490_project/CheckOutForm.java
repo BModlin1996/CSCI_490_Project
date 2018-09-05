@@ -8,6 +8,7 @@
 package com.games.baileymodlin.csci_490_project;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.sax.StartElementListener;
 import android.support.design.widget.FloatingActionButton;
@@ -52,6 +53,8 @@ public class CheckOutForm extends AppCompatActivity {
                 EditText cardSecureEdit = (EditText) findViewById(R.id.cardSecurityCodeEdit);
                 EditText expireDateEdit = (EditText) findViewById(R.id.expireDateEdit);
 
+                CardVerify verify = new CardVerify();
+
                 //Assign form objects to strings
                 firstName = firstNameEdit.getText().toString();
                 lastName = lastNameEdit.getText().toString();
@@ -63,8 +66,11 @@ public class CheckOutForm extends AppCompatActivity {
                 expireDate = expireDateEdit.getText().toString();
 
                 //Proceed to activity
-                changeActivity(1);
-
+                if(verify.verify(cardNumber)){
+                    changeActivity(1);
+                } else {
+                    cardNumberEdit.setTextColor(Color.RED);
+                }
             }
         });
 
