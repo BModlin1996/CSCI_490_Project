@@ -10,16 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4649bde4-218a-41c4-983a-1ce5ad44a189" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/games/baileymodlin/csci_490_project/Bill.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/games/baileymodlin/csci_490_project/DBConnect.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/games/baileymodlin/csci_490_project/Student.java" />
-      <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/CSCI_490_Project.iml" afterPath="$PROJECT_DIR$/CSCI_490_Project.iml" />
-      <change beforePath="$PROJECT_DIR$/app/app.iml" afterPath="$PROJECT_DIR$/app/app.iml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/games/baileymodlin/csci_490_project/CheckOutForm.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/games/baileymodlin/csci_490_project/CheckOutForm.java" />
-      <change beforePath="$PROJECT_DIR$/local.properties" afterPath="$PROJECT_DIR$/local.properties" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -153,6 +144,7 @@
   <component name="Git.Settings">
     <option name="PREVIOUS_COMMIT_AUTHORS">
       <list>
+        <option value="Bailey &lt;baileymodlin@aol.com&gt;" />
         <option value="Bailey Modlin &lt;baileymodlin@aol.com&gt;" />
         <option value="Bailey" />
       </list>
@@ -2249,7 +2241,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1536721053044" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1536721241102" />
     <property name="device.picker.selection" value="RCLLHMA7A2700955" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
     <property name="android.project.structure.last.selected" value="app" />
@@ -2693,7 +2685,14 @@
       <option name="project" value="LOCAL" />
       <updated>1536010687787</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Classes added: &#10;    - Student&#10;    - Bill&#10;    - DBConnect">
+      <created>1536721318273</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1536721318273</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TodoView">
@@ -2749,7 +2748,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Check-out activity added" />
     <MESSAGE value="Check-out activity updated" />
-    <option name="LAST_COMMIT_MESSAGE" value="Check-out activity updated" />
+    <MESSAGE value="Classes added: &#10;    - Student&#10;    - Bill&#10;    - DBConnect" />
+    <option name="LAST_COMMIT_MESSAGE" value="Classes added: &#10;    - Student&#10;    - Bill&#10;    - DBConnect" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
