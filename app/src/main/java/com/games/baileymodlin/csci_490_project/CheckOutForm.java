@@ -10,25 +10,18 @@ package com.games.baileymodlin.csci_490_project;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.sax.StartElementListener;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 public class CheckOutForm extends AppCompatActivity {
 
-    private String firstName;
-    private String lastName;
-    private String emailAdd;
     private String billAdd;
     private String nameOnCard;
     private String cardNumber;
     private String cardSecure;
     private String expireDate;
+    private Bill bill;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,19 +47,25 @@ public class CheckOutForm extends AppCompatActivity {
                 EditText expireDateEdit = (EditText) findViewById(R.id.expireDateEdit);
 
                 CardVerify verify = new CardVerify();
+                Student student = new Student();
+                bill = new Bill();
 
                 //Assign form objects to strings
-                firstName = firstNameEdit.getText().toString();
-                lastName = lastNameEdit.getText().toString();
-                emailAdd = emailAddEdit.getText().toString();
+                firstNameEdit.setText(student.getfName());
+                lastNameEdit.setText(student.getlName());
+                emailAddEdit.setText(student.getEmailAdd());
                 billAdd = billAddEdit.getText().toString();
                 nameOnCard = nameOnCardEdit.getText().toString();
                 cardNumber = cardNumberEdit.getText().toString();
                 cardSecure = cardSecureEdit.getText().toString();
                 expireDate = expireDateEdit.getText().toString();
 
+                //Validate CardNumber
+                CardVerify cardVerify = new cardVerify();
+
                 //Proceed to activity
                 if(verify.verify(cardNumber)){
+                    bill.payBill(5);
                     changeActivity(1);
                 } else {
                     cardNumberEdit.setTextColor(Color.RED);
