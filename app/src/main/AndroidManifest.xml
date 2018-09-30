@@ -20,7 +20,11 @@
             android:name=".CheckOutForm"
             android:label="@string/title_activity_check_out_form"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".AppealActivity"></activity>
+        <activity android:name=".AppealActivity" />
+        <activity
+            android:name=".PaymentConfirmation"
+            android:label="@string/title_activity_payment_confirmation"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

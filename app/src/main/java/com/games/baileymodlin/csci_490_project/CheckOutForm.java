@@ -46,8 +46,8 @@ public class CheckOutForm extends AppCompatActivity {
                 EditText cardSecureEdit = (EditText) findViewById(R.id.cardSecurityCodeEdit);
                 EditText expireDateEdit = (EditText) findViewById(R.id.expireDateEdit);
 
-                CardVerify verify = new CardVerify();
-                Student student = new Student();
+                CardVerify verify = CardVerify.getInstance();
+                Student student = Student.getInstance();
                 bill = new Bill();
 
                 //Assign form objects to strings
@@ -59,9 +59,6 @@ public class CheckOutForm extends AppCompatActivity {
                 cardNumber = cardNumberEdit.getText().toString();
                 cardSecure = cardSecureEdit.getText().toString();
                 expireDate = expireDateEdit.getText().toString();
-
-                //Validate CardNumber
-                CardVerify cardVerify = new cardVerify();
 
                 //Proceed to activity
                 if(verify.verify(cardNumber)){

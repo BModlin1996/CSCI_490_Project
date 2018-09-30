@@ -6,7 +6,17 @@ import java.sql.SQLException;
 
 public class DBConnect {
 
-    public DBConnect(){
+    private static DBConnect connect = new DBConnect();
+
+    private DBConnect(){
+
+    }
+
+    public DBConnect getInstance(){
+        return connect;
+    }
+
+    public void connect(){
         String connectString = "";
         String userName = "";
         String password ="";

@@ -12,32 +12,14 @@ public class Student {
     private String lName;
     private String studId;
     private String emailAdd;
+    private static Student student = new Student();
 
-    public Student(){
+    private Student (){
 
     }
 
-    public  Student(String fName, String lName, String studId, String emailAdd){
-        this.fName = fName;
-        this.lName = lName;
-        this.studId = studId;
-        this.emailAdd = emailAdd;
-    }
-
-    public void setfName(String fName){
-        this.fName = fName;
-    }
-
-    public void setlName(String lName){
-        this.lName = lName;
-    }
-
-    public void setStudId(String studId){
-        this.studId = studId;
-    }
-
-    public void setEmailAdd(String emailAdd) {
-        this.emailAdd = emailAdd;
+    public static Student getInstance() {
+        return student;
     }
 
     public String getfName(){

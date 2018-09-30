@@ -10,8 +10,14 @@ package com.games.baileymodlin.csci_490_project;
 
 public class CardVerify {
 
-    public CardVerify() {
+    private static CardVerify cardVerify = new CardVerify();
 
+    private CardVerify() {
+
+    }
+
+    public static CardVerify getInstance(){
+        return  cardVerify;
     }
 
     /**
