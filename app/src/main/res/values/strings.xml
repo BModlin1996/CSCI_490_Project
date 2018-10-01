@@ -29,4 +29,7 @@
         <item>Paid Off Citation</item>
         <item>Other</item>
     </string-array>
+    <string name="dialogCancel">Are you sure you want to cancel?</string>
+    <string name="yesButton">Yes</string>
+    <string name="noButton">No</string>
 </resources>

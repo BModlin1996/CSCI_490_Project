@@ -2,3 +2,55 @@
  - As a user, I want a simple and intuitive interface to process my transactions 
  - As a user, I want to be about to quickly and easily be able to pay for parking tickets using different payment methods 
  - As a user, I want to be able to save my payment information to enable one click payments
+
+
+//Appeal Form
+1 - As a user, I would like to view my personal information and my citation details, so that I can confirm its accuracy.
+
+Acceptance criterion 1:
+
+Given that the user enters the correct log in information on sign in/sign up page
+When the user navigates to the appeal page
+Then ensure that the correct information is displayed
+
+Acceptance criterion 2:
+
+Given that the user uses the wrong log in information
+When the user navigates to the appeal page
+Then ensure that the incorrect information will appear and they will be directed to the log in page
+
+
+2 - As a user, I would like to be able to be able to fill out an appeal form, select my reason for appeal and submit/cancel, so that I can have my citation reviewed for appeal.
+
+Acceptance criterion 1:
+
+Given that the user has filled out the appeal form, selected a valid reason for appeal and submitted the for
+When the user clicks submit
+Then ensure the form is sent so that it can be processed through the database
+
+Acceptance criterion 2:
+Given that the user has filled out the appeal form, selected a valid reason for appeal and submitted the for
+When the user clicks cancel
+Then ensure the user is redirected to the citations list page and the form is not submitted
+
+Acceptance criterion 3:
+
+Given that the user has not filled out the form correctly and or has not selected a valid reason
+When the user clicks submit
+Then ensure the invalid areas are highlighted, and error message shows and the form is not submitted
+
+
+3 - As a user, I expcet my appeal request to be approved or denied, so that I know if I need to pay the citation or not.
+
+Acceptance criterion 1:
+
+Given the user has submitted the form correctly
+when the form is processed and is approved
+then ensure the citations page reflects the citations current status
+
+Acceptance criterion 2:
+
+Given the user has submitted the form correctly
+when the form is processed and is denied
+then ensure the citations page reflects the citations current status
+
