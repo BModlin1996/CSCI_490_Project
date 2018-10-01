@@ -8,18 +8,37 @@ package com.games.baileymodlin.csci_490_project;
 
 public class Student {
 
+    private static Student student = new Student();
+    private WebServiceConnect webCon;
     private String fName;
     private String lName;
     private String studId;
     private String emailAdd;
-    private static Student student = new Student();
 
-    private Student (){
+    private Student(){
+
+       // webCon = new WebServiceConnect("GetStudent");
 
     }
 
-    public static Student getInstance() {
+    public static Student getInstance(){
         return student;
+    }
+
+    public void setfName(String fName){
+        this.fName = fName;
+    }
+
+    public void setlName(String lName){
+        this.lName = lName;
+    }
+
+    public void setStudId(String studId){
+        this.studId = studId;
+    }
+
+    public void setEmailAdd(String emailAdd) {
+        this.emailAdd = emailAdd;
     }
 
     public String getfName(){

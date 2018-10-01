@@ -14,6 +14,7 @@ public class Bill {
     private boolean paid;
     private Date date;
 
+
     public Bill(){
         paid = false;
         datePaid = "Null";
