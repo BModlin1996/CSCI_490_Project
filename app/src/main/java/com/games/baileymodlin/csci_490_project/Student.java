@@ -9,12 +9,15 @@ package com.games.baileymodlin.csci_490_project;
 public class Student {
 
     private static Student student = new Student();
+    private WebServiceConnect webCon;
     private String fName;
     private String lName;
     private String studId;
     private String emailAdd;
 
     private Student(){
+
+       // webCon = new WebServiceConnect("GetStudent");
 
     }
 
