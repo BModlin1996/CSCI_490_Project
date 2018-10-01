@@ -2,6 +2,7 @@ package com.games.baileymodlin.csci_490_project;
 
 import java.io.BufferedInputStream;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -11,44 +12,43 @@ import java.net.URLConnection;
 
 public class WebServiceConnect {
 
-    private static WebServiceConnect webServiceConnect = new WebServiceConnect();
+
     private URL url;
     private HttpURLConnection urlConnection;
     private final String URLString = "";
+    private String dataIn;
 
-    private WebServiceConnect() {
-       try {
-           url = new URL(URLString);
-           connect();
-       } catch (MalformedURLException e) {
-           e.printStackTrace();
-       } finally {
-           disconnect();
-       }
-    }
-
-    public static WebServiceConnect getInstance(){
-        return webServiceConnect;
-    }
-
-    private void connect(){
-        try{
+    public WebServiceConnect(String command) {
+        try {
+            url = new URL(URLString + command);
             urlConnection = (HttpURLConnection) url.openConnection();
+            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+            dataIn = readStream(in);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            urlConnection.disconnect();
         }
     }
 
-    public void get(){
-
+    private String readStream(InputStream in){
+        try{
+            ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
+            int i = in.read();
+            while(i != -1){
+                byteOut.write(i);
+                i = in.read();
+            }
+            return byteOut.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return e.toString();
+        }
     }
 
-    public void post(){
-
-    }
-
-    public void disconnect(){
-
-        urlConnection.disconnect();
+    public String getDataIn(){
+        return dataIn;
     }
 }
