@@ -10,44 +10,43 @@ package com.games.baileymodlin.csci_490_project;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.PopupWindow;
 
-public class CheckOutForm extends AppCompatActivity {
+public class CheckOutForm extends AppCompatActivity{
 
-    private String billAdd;
-    private String nameOnCard;
-    private String cardNumber;
-    private String cardSecure;
-    private String expireDate;
+    private String billAdd, nameOnCard, cardNumber, cardSecure, expireDate;
     private Bill bill;
+    private Intent intent;
+    private EditText firstNameEdit, lastNameEdit, emailAddEdit, billAddEdit, nameOnCardEdit, cardNumberEdit, cardSecureEdit, expireDateEdit;
+    private Button submitButton, cancelButton;
+    private PopupWindow popup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_out_form);
         //Initialize form components
-        Button submitButton = (Button) findViewById(R.id.submitButton);
-        Button cancelButton = (Button) findViewById(R.id.submitButton);
+        submitButton = findViewById(R.id.submitButton);
+        cancelButton = findViewById(R.id.submitButton);
+        firstNameEdit = findViewById(R.id.firstNameEdit);
+        lastNameEdit = findViewById(R.id.lastNameEdit);
+        emailAddEdit = findViewById(R.id.emailEdit);
+        billAddEdit = findViewById(R.id.emailEdit);
+        nameOnCardEdit = findViewById(R.id.cardNameEdit);
+        cardNumberEdit = findViewById(R.id.cardNumEdit);
+        cardSecureEdit = findViewById(R.id.cardSecurityCodeEdit);
+        expireDateEdit = findViewById(R.id.expireDateEdit);
 
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                //Initialize components
-                EditText firstNameEdit = (EditText) findViewById(R.id.firstNameEdit);
-                EditText lastNameEdit = (EditText) findViewById(R.id.lastNameEdit);
-                EditText emailAddEdit = (EditText) findViewById(R.id.emailEdit);
-                EditText billAddEdit = (EditText) findViewById(R.id.emailEdit);
-                EditText nameOnCardEdit = (EditText) findViewById(R.id.cardNameEdit);
-                EditText cardNumberEdit = (EditText) findViewById(R.id.cardNumEdit);
-                EditText cardSecureEdit = (EditText) findViewById(R.id.cardSecurityCodeEdit);
-                EditText expireDateEdit = (EditText) findViewById(R.id.expireDateEdit);
-
-                CardVerify verify = new CardVerify();
-                Student student = new Student();
+                Student student = Student.getInstance();
                 bill = new Bill();
 
                 //Assign form objects to strings
@@ -61,12 +60,12 @@ public class CheckOutForm extends AppCompatActivity {
                 expireDate = expireDateEdit.getText().toString();
 
                 //Validate CardNumber
-                CardVerify cardVerify = new cardVerify();
+                CardVerify verify = CardVerify.getInstance();
 
                 //Proceed to activity
                 if(verify.verify(cardNumber)){
                     bill.payBill(5);
-                    changeActivity(1);
+                    showPopup();
                 } else {
                     cardNumberEdit.setTextColor(Color.RED);
                 }
@@ -78,19 +77,23 @@ public class CheckOutForm extends AppCompatActivity {
             public void onClick(View v) {
                 //Return to previous activity
                 changeActivity(0);
-
             }
         });
     }
 
-    public void changeActivity(int id){
+    private void changeActivity(int id){
         switch (id){
             case 0:
-                Intent prevAct = new Intent(this, LoginActivity.class);
-                startActivity(prevAct);
+                intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
                 break;
             case 1:
                 break;
         }
+    }
+
+    private void showPopup(){
+
+
     }
 }

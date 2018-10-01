@@ -26,9 +26,11 @@
         android:id="@+id/lastNameEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:autofillHints=""
+        android:editable="false"
         android:ems="10"
         android:hint="@string/nameLast"
         android:inputType="textPersonName"
@@ -42,9 +44,11 @@
         android:id="@+id/firstNameEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="12dp"
+        android:layout_marginEnd="8dp"
+        android:autofillHints=""
+        android:editable="false"
         android:ems="10"
         android:hint="@string/nameFirst"
         android:inputType="textPersonName"
@@ -58,9 +62,11 @@
         android:id="@+id/emailEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:autofillHints=""
+        android:editable="false"
         android:ems="10"
         android:hint="@string/email"
         android:inputType="textEmailAddress"
@@ -82,7 +88,8 @@
         android:textColor="@color/colorAccent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailEdit" />
+        app:layout_constraintTop_toBottomOf="@+id/emailEdit"
+        android:autofillHints="" />
 
     <EditText
         android:id="@+id/cardNumEdit"
@@ -98,7 +105,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardNameEdit" />
+        app:layout_constraintTop_toBottomOf="@+id/cardNameEdit"
+        android:autofillHints="" />
 
     <TextView
         android:id="@+id/cardInfoLabel"
@@ -127,7 +135,8 @@
         android:textColor="@color/colorAccent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardInfoLabel" />
+        app:layout_constraintTop_toBottomOf="@+id/cardInfoLabel"
+        android:autofillHints="" />
 
     <EditText
         android:id="@+id/cardSecurityCodeEdit"
@@ -142,7 +151,8 @@
         android:textColor="@color/colorAccent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardNumEdit" />
+        app:layout_constraintTop_toBottomOf="@+id/cardNumEdit"
+        android:autofillHints="" />
 
     <EditText
         android:id="@+id/expireDateEdit"
@@ -157,7 +167,8 @@
         android:textColor="@color/colorAccent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardSecurityCodeEdit" />
+        app:layout_constraintTop_toBottomOf="@+id/cardSecurityCodeEdit"
+        android:autofillHints="" />
 
     <Button
         android:id="@+id/submitButton"

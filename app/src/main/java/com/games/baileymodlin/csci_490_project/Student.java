@@ -8,20 +8,18 @@ package com.games.baileymodlin.csci_490_project;
 
 public class Student {
 
+    private static Student student = new Student();
     private String fName;
     private String lName;
     private String studId;
     private String emailAdd;
 
-    public Student(){
+    private Student(){
 
     }
 
-    public  Student(String fName, String lName, String studId, String emailAdd){
-        this.fName = fName;
-        this.lName = lName;
-        this.studId = studId;
-        this.emailAdd = emailAdd;
+    public static Student getInstance(){
+        return student;
     }
 
     public void setfName(String fName){
