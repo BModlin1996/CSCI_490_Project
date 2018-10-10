@@ -11,16 +11,28 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.net.ProtocolException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class CheckOutForm extends AppCompatActivity{
 
+    private String TAG = CheckOutForm.class.getSimpleName();
     private String billAdd, nameOnCard, cardNumber, cardSecure, expireDate;
     private Bill bill;
     private Intent intent;
@@ -28,6 +40,7 @@ public class CheckOutForm extends AppCompatActivity{
     private Button submitButton, cancelButton;
     private Student student;
     private Bundle bundle;
+    ArrayList<HashMap<String, String>> studList;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -36,7 +49,7 @@ public class CheckOutForm extends AppCompatActivity{
         //Initialize form components
         student = Student.getInstance();
         submitButton = findViewById(R.id.submitButton);
-        cancelButton = findViewById(R.id.submitButton);
+        cancelButton = findViewById(R.id.cancelButton);
         firstNameEdit = findViewById(R.id.firstNameEdit);
         lastNameEdit = findViewById(R.id.lastNameEdit);
         emailAddEdit = findViewById(R.id.emailEdit);
@@ -47,9 +60,6 @@ public class CheckOutForm extends AppCompatActivity{
         expireDateEdit = findViewById(R.id.expireDateEdit);
         bundle = savedInstanceState;
 
-        firstNameEdit.setText(student.getfName());
-        lastNameEdit.setText(student.getlName());
-        emailAddEdit.setText(student.getEmailAdd());
 
         /**
          * submitButton.setOnClickListener() - The onClick listener for the submit button.
@@ -108,6 +118,8 @@ public class CheckOutForm extends AppCompatActivity{
                 changeActivity(0);
             }
         });
+
+        new GetBillInfo().execute();
     }
 
     /**
@@ -125,5 +137,61 @@ public class CheckOutForm extends AppCompatActivity{
         }
     }
 
+    private class GetBillInfo extends AsyncTask<Void, Void, Void>{
+
+        private String fName;
+        private String lName;
+        private String email;
+
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+            Toast.makeText(CheckOutForm.this, "Data is downloading", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            WebServiceConnect webCon = WebServiceConnect.getInstance();
+            String jsonStr = webCon.getData("https://ccuresearch.coastal.edu/bcmodlin/CSCI490/GetBillInfo.php");
+            Log.e(TAG, "Response from url: " + jsonStr);
+
+            if (jsonStr != null) {
+                try {
+                    JSONObject stud = new JSONObject(jsonStr);
+
+                    fName = stud.getString("fName");
+                    lName = stud.getString("lName");
+                    email = stud.getString("Email");
+
+                } catch (final JSONException e) {
+                    Log.e(TAG, "JSON parsing error: " + e.getMessage());
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(), "Couldn't get json from server.  Check log for errors", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            } else {
+                Log.e(TAG, "Couldn't get json from server.");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), "Couldn't get json from server.  Check log for errors", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result){
+            super.onPostExecute(result);
+
+            firstNameEdit.setText(fName);
+            lastNameEdit.setText(lName);
+            emailAddEdit.setText(email);
+        }
+    }
 
 }
