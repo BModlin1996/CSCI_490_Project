@@ -17,19 +17,48 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class Student {
+public class Student extends AsyncTask<Void, Void, Void> {
 
-
+    private static final String TAG = Student.class.getSimpleName();
     private static Student student = new Student();
+    private WebServiceConnect webCon;
     private String fName;
     private String lName;
     private String studId;
     private String emailAdd;
     private String password;
+    private String jsonStr;
+
+
 
     private Student(){
 
 
+    }
+
+    @Override
+    protected Void doInBackground(Void... voids) {
+
+        webCon = new WebServiceConnect();
+        jsonStr = webCon.getData("/student/1269838");
+        Log.e(TAG, "Response from url: " + jsonStr);
+
+        if (jsonStr != null) {
+            try {
+                JSONObject stud = new JSONObject(jsonStr);
+
+                fName = stud.getString("Fname");
+                lName = stud.getString("Lname");
+                emailAdd = stud.getString("Email");
+                password= stud.getString("Password");
+
+
+            } catch (final JSONException e) {
+                Log.e(TAG, "JSON parsing error: " + e.getMessage());
+            }
+        }
+
+        return null;
     }
 
     public static Student getInstance(){
@@ -40,6 +69,8 @@ public class Student {
 
 
     }
+
+
 
     private void setfName(String fName){
         this.fName = fName;

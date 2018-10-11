@@ -30,21 +30,20 @@ public class WebServiceConnect {
      * WebServiceConnect(String) - Makes a connection to the webservice and retrieves the queried information
      *
      */
-    private WebServiceConnect(){
+    private WebServiceConnect() {
 
     }
 
-
-    public static  WebServiceConnect getInstance(){
+    public static WebServiceConnect getInstance(){
         return webServiceConnect;
     }
 
+    public String getData(String link) {
 
-    public String getData(String address) {
 
         try {
             //The URL to the webserver
-            URL url = new URL(address);
+            URL url = new URL(link);
             //Make a connection to the webserver
             HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
@@ -90,5 +89,13 @@ public class WebServiceConnect {
         }
 
         return stringBuilder.toString();
+    }
+
+    /**
+     * getDataIn() - Gets the value of dataIn
+     * @return - The string value of dataIn
+     */
+    public String getDataIn(){
+        return dataIn;
     }
 }
