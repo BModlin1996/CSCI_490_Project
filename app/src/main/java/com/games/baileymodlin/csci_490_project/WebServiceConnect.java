@@ -8,42 +8,61 @@ package com.games.baileymodlin.csci_490_project;
 
 import java.io.BufferedInputStream;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
+import java.io.InputStreamReader;
+import javax.net.ssl.HttpsURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
 
+
+
 public class WebServiceConnect {
 
-    private URL url;
-    private HttpURLConnection urlConnection;
-    private final String URLString = "";
+    private static WebServiceConnect webServiceConnect = new WebServiceConnect();
     private String dataIn;
+    private static final String TAG = WebServiceConnect.class.getSimpleName();
 
     /**
      * WebServiceConnect(String) - Makes a connection to the webservice and retrieves the queried information
-     * @param command - The information to retrieve from the webservice
+     *
      */
-    public WebServiceConnect(String command) {
+    private WebServiceConnect(){
+
+    }
+
+
+    public static  WebServiceConnect getInstance(){
+        return webServiceConnect;
+    }
+
+
+    public String getData(String address) {
+
         try {
             //The URL to the webserver
-            url = new URL(URLString + command);
+            URL url = new URL(address);
             //Make a connection to the webserver
-            urlConnection = (HttpURLConnection) url.openConnection();
-            //Get the input stream
-            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-            dataIn = readStream(in);
+            HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("GET");
+            try {
+                //Get the input stream
+                InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+                dataIn = readStream(in);
+                System.out.print("Connected");
+            } finally {
+                //After the data is transacted disconnect from the webserver
+                urlConnection.disconnect();
+            }
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            //After the data is transacted disconnect from the webserver
-            urlConnection.disconnect();
         }
+        return dataIn;
     }
 
     /**
@@ -52,25 +71,24 @@ public class WebServiceConnect {
      * @return - The translated input stream
      */
     private String readStream(InputStream in){
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+        StringBuilder stringBuilder = new StringBuilder();
+        String line;
+
         try{
-            ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
-            int i = in.read();
-            while(i != -1){
-                byteOut.write(i);
-                i = in.read();
+            while((line = reader.readLine()) != null){
+                stringBuilder.append(line).append('\n');
             }
-            return byteOut.toString();
         } catch (IOException e) {
             e.printStackTrace();
-            return e.toString();
+        } finally {
+            try{
+                in.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-    }
 
-    /**
-     * getDataIn() - Gets the value of dataIn
-     * @return - The string value of dataIn
-     */
-    public String getDataIn(){
-        return dataIn;
+        return stringBuilder.toString();
     }
 }
