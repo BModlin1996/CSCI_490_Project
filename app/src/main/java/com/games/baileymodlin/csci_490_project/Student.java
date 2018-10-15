@@ -17,17 +17,18 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class Student extends AsyncTask<Void, Void, Void> {
+public class Student {
 
-    private static final String TAG = Student.class.getSimpleName();
     private static Student student = new Student();
-    private WebServiceConnect webCon;
     private String fName;
     private String lName;
     private String studId;
     private String emailAdd;
+    private String mailAdd;
+    private String city;
+    private String state;
+    private String zip;
     private String password;
-    private String jsonStr;
 
 
 
@@ -36,30 +37,7 @@ public class Student extends AsyncTask<Void, Void, Void> {
 
     }
 
-    @Override
-    protected Void doInBackground(Void... voids) {
 
-        webCon = new WebServiceConnect();
-        jsonStr = webCon.getData("/student/1269838");
-        Log.e(TAG, "Response from url: " + jsonStr);
-
-        if (jsonStr != null) {
-            try {
-                JSONObject stud = new JSONObject(jsonStr);
-
-                fName = stud.getString("Fname");
-                lName = stud.getString("Lname");
-                emailAdd = stud.getString("Email");
-                password= stud.getString("Password");
-
-
-            } catch (final JSONException e) {
-                Log.e(TAG, "JSON parsing error: " + e.getMessage());
-            }
-        }
-
-        return null;
-    }
 
     public static Student getInstance(){
         return student;
@@ -72,22 +50,37 @@ public class Student extends AsyncTask<Void, Void, Void> {
 
 
 
-    private void setfName(String fName){
+    public void setfName(String fName){
         this.fName = fName;
     }
 
-    private void setlName(String lName){
+    public void setlName(String lName){
         this.lName = lName;
     }
 
-    private void setStudId(String studId){
+    public void setStudId(String studId){
         this.studId = studId;
     }
 
-    private void setEmailAdd(String emailAdd) {
+    public void setEmailAdd(String emailAdd) {
         this.emailAdd = emailAdd;
     }
 
+    public void setMailAdd(String mailAdd){
+        this.mailAdd = mailAdd;
+    }
+
+    public void setCity(String city){
+        this.city = city;
+    }
+
+    public void setState(String state){
+        this.state = state;
+    }
+
+    public void setZip(String zip){
+        this.zip = zip;
+    }
     public String getfName(){
         return fName;
     }
@@ -102,5 +95,9 @@ public class Student extends AsyncTask<Void, Void, Void> {
 
     public String getEmailAdd(){
         return emailAdd;
+    }
+
+    public String getMailAdd(){
+        return mailAdd + " " + city + ", " + state + " " + zip;
     }
 }

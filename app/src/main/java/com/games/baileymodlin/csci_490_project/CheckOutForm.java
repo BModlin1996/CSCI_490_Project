@@ -10,6 +10,7 @@ package com.games.baileymodlin.csci_490_project;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -33,33 +34,31 @@ import java.util.HashMap;
 public class CheckOutForm extends AppCompatActivity{
 
     private String TAG = CheckOutForm.class.getSimpleName();
-    private String billAdd, nameOnCard, cardNumber, cardSecure, expireDate;
-    private Bill bill;
+    private String  nameOnCard, cardNumber, cardSecure, expireDate;
     private Intent intent;
     private EditText firstNameEdit, lastNameEdit, emailAddEdit, billAddEdit, nameOnCardEdit, cardNumberEdit, cardSecureEdit, expireDateEdit;
     private Button submitButton, cancelButton;
-    private Student student;
-    private Bundle bundle;
-    ArrayList<HashMap<String, String>> studList;
+    private boolean valid = true;
+
+
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_out_form);
         //Initialize form components
-        student = Student.getInstance();
         submitButton = findViewById(R.id.submitButton);
         cancelButton = findViewById(R.id.cancelButton);
         firstNameEdit = findViewById(R.id.firstNameEdit);
         lastNameEdit = findViewById(R.id.lastNameEdit);
         emailAddEdit = findViewById(R.id.emailEdit);
-        billAddEdit = findViewById(R.id.emailEdit);
+        billAddEdit = findViewById(R.id.billAddressEdit);
         nameOnCardEdit = findViewById(R.id.cardNameEdit);
         cardNumberEdit = findViewById(R.id.cardNumEdit);
         cardSecureEdit = findViewById(R.id.cardSecurityCodeEdit);
         expireDateEdit = findViewById(R.id.expireDateEdit);
-        bundle = savedInstanceState;
 
+        new GetBillInfo().execute();
 
         /**
          * submitButton.setOnClickListener() - The onClick listener for the submit button.
@@ -76,10 +75,7 @@ public class CheckOutForm extends AppCompatActivity{
             @Override
             public void onClick(View v) {
 
-                bill = new Bill();
-
                 //Assign form objects to string
-                billAdd = billAddEdit.getText().toString();
                 nameOnCard = nameOnCardEdit.getText().toString();
                 cardNumber = cardNumberEdit.getText().toString();
                 cardSecure = cardSecureEdit.getText().toString();
@@ -88,12 +84,38 @@ public class CheckOutForm extends AppCompatActivity{
                 //Validate CardNumber
                 CardVerify verify = CardVerify.getInstance();
 
-                //Proceed to activity
-                if(verify.verify(cardNumber)){
-                    bill.payBill(5);
-
+                //Verify name on card is valid
+                if(!verify.verifyName(nameOnCard)){
+                    valid = false;
+                    nameOnCardEdit.setTextColor(Color.RED);
+                    Toast.makeText(CheckOutForm.this, "Incorrect information name invalid", Toast.LENGTH_LONG);
                 } else {
+                    valid = true;
+                    nameOnCardEdit.setTextColor(Color.WHITE);
+                }
+
+                //Verify card number is valid
+                if(verify.verifyCardNum(cardNumber)){
+                    valid = false;
                     cardNumberEdit.setTextColor(Color.RED);
+                    Toast.makeText(CheckOutForm.this, "Incorrect information card number invalid", Toast.LENGTH_LONG);
+                } else {
+                    valid = true;
+                    cardNumberEdit.setTextColor(Color.WHITE);
+                }
+
+                //Verify expiration date is valid
+                if(verify.verifyDate(expireDate)){
+                    valid = false;
+                    expireDateEdit.setTextColor(Color.RED);
+                    Toast.makeText(CheckOutForm.this, "Incorrect information expiration date invalid", Toast.LENGTH_LONG);
+                } else {
+                    valid = true;
+                    expireDateEdit.setTextColor(Color.WHITE);
+                }
+
+                if(valid){
+                    changeActivity(1);
                 }
             }
         });
@@ -119,7 +141,7 @@ public class CheckOutForm extends AppCompatActivity{
             }
         });
 
-        new GetBillInfo().execute();
+
     }
 
     /**
@@ -129,7 +151,7 @@ public class CheckOutForm extends AppCompatActivity{
     private void changeActivity(int id){
         switch (id){
             case 0:
-                intent = new Intent(this, LoginActivity.class);
+                intent = new Intent(this, BillInfoActivity.class);
                 startActivity(intent);
                 break;
             case 1:
@@ -139,14 +161,12 @@ public class CheckOutForm extends AppCompatActivity{
 
     private class GetBillInfo extends AsyncTask<Void, Void, Void>{
 
-        private String fName;
-        private String lName;
-        private String email;
+        private String fName, lName, email, addr, city, state, zip;
 
         @Override
         protected void onPreExecute(){
             super.onPreExecute();
-            Toast.makeText(CheckOutForm.this, "Data is downloading", Toast.LENGTH_SHORT).show();
+            Toast.makeText(CheckOutForm.this, "Data is downloading", Toast.LENGTH_LONG).show();
         }
 
         @Override
@@ -157,18 +177,22 @@ public class CheckOutForm extends AppCompatActivity{
 
             if (jsonStr != null) {
                 try {
-                    JSONObject stud = new JSONObject(jsonStr);
-
-                    fName = stud.getString("fName");
-                    lName = stud.getString("lName");
+                    JSONArray studArray = new JSONArray(jsonStr);
+                    JSONObject stud = studArray.getJSONObject(0);
+                    fName = stud.getString("Fname");
+                    lName = stud.getString("Lname");
                     email = stud.getString("Email");
+                    addr = stud.getString("Address");
+                    city = stud.getString("City");
+                    state = stud.getString("State");
+                    zip = stud.getString("Zip");
 
                 } catch (final JSONException e) {
                     Log.e(TAG, "JSON parsing error: " + e.getMessage());
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(getApplicationContext(), "Couldn't get json from server.  Check log for errors", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "JSON parsing error.  Check log for errors", Toast.LENGTH_LONG).show();
                         }
                     });
                 }
@@ -187,10 +211,20 @@ public class CheckOutForm extends AppCompatActivity{
         @Override
         protected void onPostExecute(Void result){
             super.onPostExecute(result);
+            Student student = Student.getInstance();
 
-            firstNameEdit.setText(fName);
-            lastNameEdit.setText(lName);
-            emailAddEdit.setText(email);
+            student.setfName(fName);
+            student.setlName(lName);
+            student.setEmailAdd(email);
+            student.setMailAdd(addr);
+            student.setCity(city);
+            student.setState(state);
+            student.setZip(zip);
+
+            firstNameEdit.setText(student.getfName());
+            lastNameEdit.setText(student.getlName());
+            emailAddEdit.setText(student.getEmailAdd());
+            billAddEdit.setText(student.getMailAdd());
         }
     }
 
