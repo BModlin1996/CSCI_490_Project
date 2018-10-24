@@ -7,17 +7,17 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 public class RegisterRequest extends StringRequest {
-    private static final String REGISTER_REQUEST_URL = "insert url for database";
+    private static final String REGISTER_REQUEST_URL = "https://ccuresearch.coastal.edu/mykistner/Register.php";
     private Map<String, String> params;
 
-    public ResgisterRequest(String fname, String lname, String email, String ccuid, String pass, Response.Listener<String> listener){
+    public RegisterRequest(String fname, String lname, String ccuid, String email, String pass, Response.Listener<String> listener){
         super(Method.POST, REGISTER_REQUEST_URL, listener, null );
         params= new HashMap<>();
-        params.put("First Name", fname);
-        params.put("Last Name", lname);
-        params.put("Email", email);
-        params.put("CCU ID",ccuid);
-        params.put("Password", pass);
+        params.put("fname", fname);
+        params.put("lname", lname);
+        params.put("email", email);
+        params.put("ccuID", ccuid);
+        params.put("password", pass);
     }
     @Override
     public Map<String, String> getParams(){

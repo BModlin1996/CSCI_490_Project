@@ -6,7 +6,7 @@ import android.widget.EditText;
 public class UserActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_useractivity);
 
         final EditText email = (EditText) findViewById(R.id.email);
         final EditText fname = (EditText) findViewById(R.id.Fname);
