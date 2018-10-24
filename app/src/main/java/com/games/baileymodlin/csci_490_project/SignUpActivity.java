@@ -1,4 +1,6 @@
 package com.games.baileymodlin.csci_490_project;
+
+
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -24,13 +26,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class LoginActivity extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity{
 
     private String TAG = CheckOutForm.class.getSimpleName();
-    private String billAdd, nameOnCard, cardNumber, cardSecure, expireDate;
     private Intent intent;
-    private EditText emailEdit, passwordEdit;
-    private Button loginButton, registerButton;
+    private EditText firstNameEdit, lastNameEdit, ccuidEdit, emailAddEdit, passwordEdit;
+    private Button signupButton, cancelButton;
     private Student student;
     private Bundle bundle;
     ArrayList<HashMap<String, String>> studList;
@@ -38,13 +39,16 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_signup);
         //Initialize form components
         student = Student.getInstance();
-        loginButton = findViewById(R.id.blogin);
-        registerButton = findViewById(R.id.bsignup);
-        emailEdit = findViewById(R.id.email);
-        passwordEdit = findViewById(R.id.lastNameEdit);
+        signupButton = findViewById(R.id.bsignup);
+        cancelButton = findViewById(R.id.bcancel);
+        firstNameEdit = findViewById(R.id.firstNameEdit);
+        lastNameEdit = findViewById(R.id.lastNameEdit);
+        ccuidEdit = findViewById(R.id.CCUID);
+        emailAddEdit = findViewById(R.id.emailEdit);
+        passwordEdit = findViewById(R.id.loginPASS);
         bundle = savedInstanceState;
 
 
@@ -52,7 +56,7 @@ public class LoginActivity extends AppCompatActivity {
          * submitButton.setOnClickListener() - The onClick listener for the submit button.
          * Creates View.OnClickListener(){}
          */
-        loginButton.setOnClickListener(new View.OnClickListener() {
+        signupButton.setOnClickListener(new View.OnClickListener() {
 
             /**
              * When pressed the onClick listener will get and verify the credit card information provided by the user.
@@ -62,7 +66,10 @@ public class LoginActivity extends AppCompatActivity {
              */
             @Override
             public void onClick(View v) {
-                final String email = emailEdit.getText().toString();
+                final String fname = firstNameEdit.getText().toString();
+                final String lname = lastNameEdit.getText().toString();
+                final String ccuid = ccuidEdit.getText().toString();
+                final String email = emailAddEdit.getText().toString();
                 final String password = passwordEdit.getText().toString();
 
                 Response.Listener<String> responseListener = new Response.Listener<String>() {
@@ -75,13 +82,13 @@ public class LoginActivity extends AppCompatActivity {
                                 int ccuID=jsonResponse.getInt("ccuId");
                                 String name=jsonResponse.getString("fname");
 
-                                Intent intent = new Intent(LoginActivity.this, UserActivity.class);
+                                Intent intent = new Intent(SignUpActivity.this, UserActivity.class);
                                 intent.putExtra("ccuID", ccuID);
                                 intent.putExtra("fname", name);
 
                             }else{
-                                AlertDialog.Builder builder= new AlertDialog.Builder(LoginActivity.this);
-                                builder.setMessage("Login Fail")
+                                AlertDialog.Builder builder= new AlertDialog.Builder(SignUpActivity.this);
+                                builder.setMessage("Sign Up Fail")
                                         .setNegativeButton("Retry", null)
                                         .create()
                                         .show();
@@ -92,7 +99,8 @@ public class LoginActivity extends AppCompatActivity {
 
                     }
                 };
-                LoginRequest loginRequest = new LoginRequest(email, password, responseListener);
+
+                RegisterRequest registerRequest = new RegisterRequest(fname,lname,ccuid,email,password, responseListener);
 
             }
         });
@@ -101,7 +109,7 @@ public class LoginActivity extends AppCompatActivity {
          * cancelButton.setOnClickListener - The onClick listener for the cancel button.
          * Creates View.OnClickListener(){}
          */
-        registerButton.setOnClickListener(new View.OnClickListener() {
+        cancelButton.setOnClickListener(new View.OnClickListener() {
             /**
              * When pressed the user will be prompted that they are about to cancel the payment process.
              * If the user agrees to cancel they will be redirected to the previous activity.
@@ -122,17 +130,19 @@ public class LoginActivity extends AppCompatActivity {
 
     /**
      * changeActivity(int) - Selects which activity to change to based off of the provided integer
-     *
      * @param id - The integer provided to select the next activity
      */
-    private void changeActivity(int id) {
-        switch (id) {
+    private void changeActivity(int id){
+        switch (id){
             case 0:
-                intent = new Intent(this, SignUpActivity.class);
+                intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
                 break;
             case 1:
                 break;
         }
     }
-}
+
+
+    }
+
