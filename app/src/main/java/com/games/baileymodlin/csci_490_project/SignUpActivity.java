@@ -15,7 +15,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,7 +32,7 @@ public class SignUpActivity extends AppCompatActivity{
 
     private String TAG = CheckOutForm.class.getSimpleName();
     private Intent intent;
-    private EditText firstNameEdit, lastNameEdit, ccuidEdit, emailAddEdit, passwordEdit;
+    private EditText firstNameEdit, lastNameEdit, ccuidEdit, emailAddEdit, passwordEdit, checkPass;
     private Button signupButton, cancelButton;
     private Student student;
     private Bundle bundle;
@@ -49,6 +51,7 @@ public class SignUpActivity extends AppCompatActivity{
         ccuidEdit = findViewById(R.id.CCUID);
         emailAddEdit = findViewById(R.id.emailEdit);
         passwordEdit = findViewById(R.id.loginPASS);
+        checkPass = findViewById(R.id.checkPass);
         bundle = savedInstanceState;
 
 
@@ -66,6 +69,7 @@ public class SignUpActivity extends AppCompatActivity{
              */
             @Override
             public void onClick(View v) {
+                if(passwordEdit==checkPass){
                 final String fname = firstNameEdit.getText().toString();
                 final String lname = lastNameEdit.getText().toString();
                 final String ccuid = ccuidEdit.getText().toString();
@@ -101,8 +105,18 @@ public class SignUpActivity extends AppCompatActivity{
                 };
 
                 RegisterRequest registerRequest = new RegisterRequest(fname,lname,ccuid,email,password, responseListener);
+                    RequestQueue queue = Volley.newRequestQueue(SignUpActivity.this);
+                    queue.add(registerRequest);
 
+            }else{
+                    AlertDialog.Builder builder= new AlertDialog.Builder(SignUpActivity.this);
+                    builder.setMessage("Password does not match")
+                            .setNegativeButton("Retry", null)
+                            .create()
+                            .show();
+                }
             }
+
         });
 
         /**
