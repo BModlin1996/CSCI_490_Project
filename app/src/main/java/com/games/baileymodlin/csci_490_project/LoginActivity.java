@@ -54,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
          * submitButton.setOnClickListener() - The onClick listener for the submit button.
          * Creates View.OnClickListener(){}
          */
-        loginButton.setOnClickListener(new View.OnClickListener() {
+       loginButton.setOnClickListener(new View.OnClickListener() {
 
             /**
              * When pressed the onClick listener will get and verify the credit card information provided by the user.
@@ -66,39 +66,13 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 final String email = emailEdit.getText().toString();
                 final String password = passwordEdit.getText().toString();
+                Student stu = Student.getInstance();
 
-                Response.Listener<String> responseListener = new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject jsonResponse = new JSONObject(response);
-                            boolean success = jsonResponse.getBoolean("success");
-                            if(success){
-                                int ccuID=jsonResponse.getInt("ccuId");
-                                String name=jsonResponse.getString("fname");
+                if (email.equals(stu.getEmailAdd()) && password.equals(stu.getPassword())) {
 
-                                Intent intent = new Intent(LoginActivity.this, UserActivity.class);
-                                intent.putExtra("ccuID", ccuID);
-                                intent.putExtra("fname", name);
-
-                                LoginActivity.this.startActivity(intent);
-
-                            }else{
-                                AlertDialog.Builder builder= new AlertDialog.Builder(LoginActivity.this);
-                                builder.setMessage("Login Fail")
-                                        .setNegativeButton("Retry", null)
-                                        .create()
-                                        .show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                };
-                LoginRequest loginRequest = new LoginRequest(email, password, responseListener);
-                RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
-                queue.add(loginRequest);
+                    Intent intent = new Intent(LoginActivity.this, UserActivity.class);
+                    LoginActivity.this.startActivity(intent);
+                }
 
             }
         });
@@ -141,4 +115,62 @@ public class LoginActivity extends AppCompatActivity {
                 break;
         }
     }
+    private class GetBillInfo extends AsyncTask<Void, Void, Void>{
+
+        private String email;
+        private String password;
+
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+            Toast.makeText(LoginActivity.this, "Data is downloading", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            WebServiceConnect webCon = WebServiceConnect.getInstance();
+            String jsonStr = webCon.getData("https://ccuresearch.coastal.edu/mykistner/CSCI490/Login.php");
+            Log.e(TAG, "Response from url: " + jsonStr);
+
+            if (jsonStr != null) {
+                try {
+                    JSONObject stud = new JSONObject(jsonStr);
+
+                    email = stud.getString("Email");
+                    password = stud.getString("Password");
+
+                } catch (final JSONException e) {
+                    Log.e(TAG, "JSON parsing error: " + e.getMessage());
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(), "Couldn't get json from server.  Check log for errors", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            } else {
+                Log.e(TAG, "Couldn't get json from server.");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), "Couldn't get json from server.  Check log for errors", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+            return null;
+        }
+
+
+        @Override
+        protected void onPostExecute(Void result){
+            super.onPostExecute(result);
+            Student stu = Student.getInstance();
+            stu.setEmailAdd(email);
+            stu.setPassword(password);
+
+
+
+        }
+    }
+
 }
