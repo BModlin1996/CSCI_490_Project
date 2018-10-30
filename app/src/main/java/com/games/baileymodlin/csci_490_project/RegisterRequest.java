@@ -6,6 +6,7 @@ import com.android.volley.toolbox.StringRequest;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+//RegisterRequest posts information to Register.php to verify that it is ok to add to the database
 public class RegisterRequest extends StringRequest {
     private static final String REGISTER_REQUEST_URL = "https://ccuresearch.coastal.edu/mykistner/490project/Register.php";
     private Map<String, String> params;
