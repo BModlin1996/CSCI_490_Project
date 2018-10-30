@@ -90,6 +90,8 @@ public class SignUpActivity extends AppCompatActivity{
                                 intent.putExtra("ccuID", ccuID);
                                 intent.putExtra("fname", name);
 
+                                SignUpActivity.this.startActivity(intent);
+
                             }else{
                                 AlertDialog.Builder builder= new AlertDialog.Builder(SignUpActivity.this);
                                 builder.setMessage("Sign Up Fail")

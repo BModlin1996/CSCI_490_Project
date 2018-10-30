@@ -81,6 +81,8 @@ public class LoginActivity extends AppCompatActivity {
                                 intent.putExtra("ccuID", ccuID);
                                 intent.putExtra("fname", name);
 
+                                LoginActivity.this.startActivity(intent);
+
                             }else{
                                 AlertDialog.Builder builder= new AlertDialog.Builder(LoginActivity.this);
                                 builder.setMessage("Login Fail")
