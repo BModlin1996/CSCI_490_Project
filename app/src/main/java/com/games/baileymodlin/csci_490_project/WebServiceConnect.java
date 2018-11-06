@@ -7,10 +7,21 @@
 package com.games.baileymodlin.csci_490_project;
 
 import java.io.BufferedInputStream;
+<<<<<<< HEAD
+=======
+
+import java.io.BufferedOutputStream;
+>>>>>>> origin/master
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+<<<<<<< HEAD
+=======
+import javax.net.ssl.HttpsURLConnection;
+
+import java.io.OutputStream;
+>>>>>>> origin/master
 import java.net.MalformedURLException;
 import java.net.URL;
 
