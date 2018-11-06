@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CSCI_490_Project</string>
+    <string name="app_name">CCU Parking Ticket System</string>
     <string name="title_activity_check_out_form">CheckOutForm</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="label_make_payment">Make Payment</string>
@@ -32,5 +32,11 @@
     <string name="dialogCancel">Are you sure you want to cancel?</string>
     <string name="yesButton">Yes</string>
     <string name="noButton">No</string>
-    <string name="title_activity_bill_info">BillInfoActivity</string>
+    <string name="loginButton">Login</string>
+    <string name="registerButton">Sign up</string>
+    <string name="password">Password</string>
+    <string name="appealButton">Appeal</string>
+    <string name="payButton">Pay</string>
+    <string name="retypepassword">Re-Type Password</string>
+    <string name="studId">CCU ID</string>
 </resources>

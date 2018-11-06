@@ -1,4 +1,5 @@
 package com.games.baileymodlin.csci_490_project;
+
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,7 +14,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,26 +30,23 @@ import java.util.HashMap;
 public class LoginActivity extends AppCompatActivity {
 
     private String TAG = CheckOutForm.class.getSimpleName();
-    private String billAdd, nameOnCard, cardNumber, cardSecure, expireDate;
     private Intent intent;
     private EditText emailEdit, passwordEdit;
     private Button loginButton, registerButton;
     private Student student;
-    private Bundle bundle;
-    ArrayList<HashMap<String, String>> studList;
+    public String usrEmail;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
         //Initialize form components
         student = Student.getInstance();
         loginButton = findViewById(R.id.blogin);
         registerButton = findViewById(R.id.bsignup);
-        emailEdit = findViewById(R.id.email);
-        passwordEdit = findViewById(R.id.lastNameEdit);
-        bundle = savedInstanceState;
-
+        emailEdit = findViewById(R.id.loginEmail);
+        passwordEdit = findViewById(R.id.regPASS);
 
         /**
          * submitButton.setOnClickListener() - The onClick listener for the submit button.
@@ -62,38 +62,17 @@ public class LoginActivity extends AppCompatActivity {
              */
             @Override
             public void onClick(View v) {
-                final String email = emailEdit.getText().toString();
+                usrEmail = emailEdit.getText().toString();
                 final String password = passwordEdit.getText().toString();
 
-                Response.Listener<String> responseListener = new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject jsonResponse = new JSONObject(response);
-                            boolean success = jsonResponse.getBoolean("success");
-                            if(success){
-                                int ccuID=jsonResponse.getInt("ccuId");
-                                String name=jsonResponse.getString("fname");
+                student = Student.getInstance();
+                getBill();
 
-                                Intent intent = new Intent(LoginActivity.this, UserActivity.class);
-                                intent.putExtra("ccuID", ccuID);
-                                intent.putExtra("fname", name);
+                if (usrEmail.equals(student.getEmailAdd()) && password.equals(student.getPassword())) {
 
-                            }else{
-                                AlertDialog.Builder builder= new AlertDialog.Builder(LoginActivity.this);
-                                builder.setMessage("Login Fail")
-                                        .setNegativeButton("Retry", null)
-                                        .create()
-                                        .show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                };
-                LoginRequest loginRequest = new LoginRequest(email, password, responseListener);
-
+                    intent = new Intent(LoginActivity.this, UserActivity.class);
+                    LoginActivity.this.startActivity(intent);
+                }
             }
         });
 
@@ -110,9 +89,6 @@ public class LoginActivity extends AppCompatActivity {
              */
             @Override
             public void onClick(View v) {
-
-                // Dialog dialogBox = new DialogBox().onCreateDialog(bundle);
-                // dialogBox.show();
                 //Return to previous activity
                 changeActivity(0);
             }
@@ -132,7 +108,65 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
                 break;
             case 1:
+                intent = new Intent(this, UserActivity.class);
+                startActivity(intent);
                 break;
         }
     }
+
+    private void getBill(){
+        new GetBillInfo().execute();
+    }
+
+    private class GetBillInfo extends AsyncTask<Void, Void, Void>{
+
+        private String email;
+        private String password;
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            WebServiceConnect webCon = WebServiceConnect.getInstance();
+            String jsonStr = webCon.getData("https://ccuresearch.coastal.edu/bcmodlin/CSCI_490/Resources/Login.php?email=" + usrEmail);
+            Log.e(TAG, "Response from url: " + jsonStr);
+
+            if (jsonStr != null) {
+                try {
+                    JSONArray studArray = new JSONArray(jsonStr);
+                    JSONObject stud = studArray.getJSONObject(0);
+
+                    email = stud.getString("Email");
+                    password = stud.getString("Password");
+
+                } catch (final JSONException e) {
+                    Log.e(TAG, "JSON parsing error: " + e.getMessage());
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(), "Couldn't get json from server.  Check log for errors", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            } else {
+                Log.e(TAG, "Couldn't get json from server.");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), "Couldn't get json from server.  Check log for errors", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+            return null;
+        }
+
+
+        @Override
+        protected void onPostExecute(Void result){
+            super.onPostExecute(result);
+            Student stu = Student.getInstance();
+            stu.setEmailAdd(email);
+            stu.setPassword(password);
+        }
+    }
+
 }
+

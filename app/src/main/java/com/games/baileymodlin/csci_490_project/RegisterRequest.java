@@ -3,11 +3,10 @@ package com.games.baileymodlin.csci_490_project;
 import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
 
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 public class RegisterRequest extends StringRequest {
-    private static final String REGISTER_REQUEST_URL = "https://ccuresearch.coastal.edu/mykistner/Register.php";
+    private static final String REGISTER_REQUEST_URL = "https://ccuresearch.coastal.edu/mykistner/490project/Register.php";
     private Map<String, String> params;
 
     public RegisterRequest(String fname, String lname, String ccuid, String email, String pass, Response.Listener<String> listener){
@@ -24,4 +23,3 @@ public class RegisterRequest extends StringRequest {
         return params;
     }
 }
-//hello

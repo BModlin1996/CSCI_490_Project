@@ -24,7 +24,7 @@ public class AppealActivity extends AppCompatActivity {
     private Intent intent;
     private Spinner reasonAppeal;
     private EditText fNameEdit, lNameEdit, addressEdit, cityEdit, stateEdit, zipCodeEdit, emailEdit, phoneEdit;
-    private Button cancelButton, submitButton;
+    private Button submitButton;
     private Bundle bundle;
     private Student student;
 
@@ -46,31 +46,23 @@ public class AppealActivity extends AppCompatActivity {
         phoneEdit = findViewById(R.id.phoneEdit);
 
         reasonAppeal = findViewById(R.id.reasonSpinner);
-
-        cancelButton = findViewById(R.id.cancel);
-
         submitButton = findViewById(R.id.submit);
-
-
-
-        cancelButton.setOnClickListener(new View.OnClickListener() {
+        submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 changeActivity(0);
             }
         });
         new GetAppealInfo().execute();
-        }
+    }
 
 
 
     private void changeActivity(int id){
         switch (id){
             case 0:
-                intent = new Intent(this, LoginActivity.class);
+                intent = new Intent(this, UserActivity.class);
                 startActivity(intent);
-                break;
-            case 1:
                 break;
         }
     }

@@ -6,19 +6,9 @@
  */
 package com.games.baileymodlin.csci_490_project;
 
-import android.os.AsyncTask;
-import android.provider.ContactsContract;
-import android.util.Log;
-import android.widget.Toast;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
-
 public class Student {
 
+    private static final String TAG = Student.class.getSimpleName();
     private static Student student = new Student();
     private String fName;
     private String lName;
@@ -29,6 +19,7 @@ public class Student {
     private String state;
     private String zip;
     private String password;
+    private String phone;
 
 
 
@@ -81,6 +72,15 @@ public class Student {
     public void setZip(String zip){
         this.zip = zip;
     }
+
+    public void setPassword(String password){
+        this.password = password;
+    }
+
+    public void setPhone(String phone){
+        this.phone = phone;
+    }
+
     public String getfName(){
         return fName;
     }
@@ -99,5 +99,9 @@ public class Student {
 
     public String getMailAdd(){
         return mailAdd + " " + city + ", " + state + " " + zip;
+    }
+
+    public String getPassword(){
+        return password;
     }
 }
