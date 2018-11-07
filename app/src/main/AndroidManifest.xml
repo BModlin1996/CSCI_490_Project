@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.games.baileymodlin.csci_490_project">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+
 
     <application
         android:allowBackup="true"
@@ -13,22 +14,33 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-
         <activity android:name=".LoginActivity">
-
-        </activity>
-        <activity
-            android:name=".CheckOutForm"
-            android:label="@string/title_activity_check_out_form"
-            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AppealActivity">
-
+        <activity android:name=".UserActivity" />
+        <activity android:name=".CheckOutForm">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.games.baileymodlin.csci_490_project.BillInfoActivity" />
+        </activity>
+        <activity android:name=".BillInfoActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.games.baileymodlin.csci_490_project.UserActivity" />
+        </activity>
+        <activity android:name=".SignUpActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.games.baileymodlin.csci_490_project.LoginActivity"/>
+        </activity>
+        <activity android:name=".AppealActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.games.baileymodlin.csci_490_project.UserActivity" />
         </activity>
     </application>
 

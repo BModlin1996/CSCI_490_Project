@@ -26,7 +26,7 @@ public class CardVerify {
      * @param num
      * @return
      */
-    public boolean verify(String num) {
+    public boolean verifyCardNum(String num) {
         if (luhn(num)) {
             return true;
         } else {
@@ -67,5 +67,35 @@ public class CardVerify {
         } else {
             return false;
         }
+    }
+
+    public boolean verifyName(String name){
+        if(nameVerify(name)){
+             return true;
+        } else  {
+            return false;
+        }
+    }
+
+    private boolean nameVerify(String name){
+        char charArray[] = name.toCharArray();
+        for(int i = 0; i < name.length(); i++){
+            if((charArray[i] < 'A' || charArray[i] > 'Z') && (charArray[i] < 'a' || charArray[i] > 'z')){
+              return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean verifyDate(String date){
+        if(dateVerify(date)){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean dateVerify(String date){
+        return true;
     }
 }

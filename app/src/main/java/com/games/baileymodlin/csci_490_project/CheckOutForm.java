@@ -7,59 +7,78 @@
  */
 package com.games.baileymodlin.csci_490_project;
 
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.ProtocolException;
-import java.util.ArrayList;
-import java.util.HashMap;
 
-
-public class CheckOutForm extends AppCompatActivity{
+public class CheckOutForm extends AppCompatActivity {
 
     private String TAG = CheckOutForm.class.getSimpleName();
-    private String billAdd, nameOnCard, cardNumber, cardSecure, expireDate;
-    private Bill bill;
+    private String nameOnCard, cardNumber, cardSecure, expireDate;
     private Intent intent;
     private EditText firstNameEdit, lastNameEdit, emailAddEdit, billAddEdit, nameOnCardEdit, cardNumberEdit, cardSecureEdit, expireDateEdit;
-    private Button submitButton, cancelButton;
+    private Button submitButton;
+    private boolean valid = true;
     private Student student;
-    private Bundle bundle;
-    ArrayList<HashMap<String, String>> studList;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_out_form);
-        //Initialize form components
+
         student = Student.getInstance();
+
+        //Initialize form components
         submitButton = findViewById(R.id.submitButton);
-        cancelButton = findViewById(R.id.cancelButton);
         firstNameEdit = findViewById(R.id.firstNameEdit);
         lastNameEdit = findViewById(R.id.lastNameEdit);
         emailAddEdit = findViewById(R.id.emailEdit);
-        billAddEdit = findViewById(R.id.emailEdit);
+        billAddEdit = findViewById(R.id.billAddressEdit);
         nameOnCardEdit = findViewById(R.id.cardNameEdit);
         cardNumberEdit = findViewById(R.id.cardNumEdit);
         cardSecureEdit = findViewById(R.id.cardSecurityCodeEdit);
         expireDateEdit = findViewById(R.id.expireDateEdit);
-        bundle = savedInstanceState;
 
+
+        firstNameEdit.setText(student.getfName());
+        lastNameEdit.setText(student.getlName());
+        emailAddEdit.setText(student.getEmailAdd());
+        billAddEdit.setText(student.getMailAdd());
+
+
+        nameOnCardEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                CardVerify verify = CardVerify.getInstance();
+                verify.verifyName(nameOnCard.toString());
+            }
+        });
 
         /**
          * submitButton.setOnClickListener() - The onClick listener for the submit button.
@@ -76,10 +95,7 @@ public class CheckOutForm extends AppCompatActivity{
             @Override
             public void onClick(View v) {
 
-                bill = new Bill();
-
                 //Assign form objects to string
-                billAdd = billAddEdit.getText().toString();
                 nameOnCard = nameOnCardEdit.getText().toString();
                 cardNumber = cardNumberEdit.getText().toString();
                 cardSecure = cardSecureEdit.getText().toString();
@@ -88,110 +104,51 @@ public class CheckOutForm extends AppCompatActivity{
                 //Validate CardNumber
                 CardVerify verify = CardVerify.getInstance();
 
-                //Proceed to activity
-                if(verify.verify(cardNumber)){
-                    bill.payBill(5);
-
+                //Verify name on card is valid
+                if (!verify.verifyName(nameOnCard)) {
+                    valid = false;
+                    nameOnCardEdit.setTextColor(Color.RED);
+                    Toast.makeText(CheckOutForm.this, "Incorrect information name invalid", Toast.LENGTH_LONG);
                 } else {
+                    valid = true;
+                    nameOnCardEdit.setTextColor(Color.WHITE);
+                }
+
+                //Verify card number is valid
+                if (verify.verifyCardNum(cardNumber)) {
+                    valid = false;
                     cardNumberEdit.setTextColor(Color.RED);
+                    Toast.makeText(CheckOutForm.this, "Incorrect information card number invalid", Toast.LENGTH_LONG);
+                } else {
+                    valid = true;
+                    cardNumberEdit.setTextColor(Color.WHITE);
+                }
+
+                //Verify expiration date is valid
+                if (verify.verifyDate(expireDate)) {
+                    valid = false;
+                    expireDateEdit.setTextColor(Color.RED);
+                    Toast.makeText(CheckOutForm.this, "Incorrect information expiration date invalid", Toast.LENGTH_LONG);
+                } else {
+                    valid = true;
+                    expireDateEdit.setTextColor(Color.WHITE);
+                }
+
+                if (valid) {
+                    intent = new Intent(CheckOutForm.this, UserActivity.class);
+                    startActivity(intent);
                 }
             }
         });
-
-        /**
-         * cancelButton.setOnClickListener - The onClick listener for the cancel button.
-         * Creates View.OnClickListener(){}
-         */
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            /**
-             * When pressed the user will be prompted that they are about to cancel the payment process.
-             * If the user agrees to cancel they will be redirected to the previous activity.
-             * Otherwise they will be returned to the CheckOutActivity.
-             * @param v
-             */
-            @Override
-            public void onClick(View v) {
-
-               // Dialog dialogBox = new DialogBox().onCreateDialog(bundle);
-               // dialogBox.show();
-                //Return to previous activity
-                changeActivity(0);
-            }
-        });
-
-        new GetBillInfo().execute();
     }
 
-    /**
-     * changeActivity(int) - Selects which activity to change to based off of the provided integer
-     * @param id - The integer provided to select the next activity
-     */
-    private void changeActivity(int id){
-        switch (id){
-            case 0:
-                intent = new Intent(this, LoginActivity.class);
-                startActivity(intent);
-                break;
-            case 1:
-                break;
-        }
-    }
-
-    private class GetBillInfo extends AsyncTask<Void, Void, Void>{
-
-        private String fName;
-        private String lName;
-        private String email;
-
-        @Override
-        protected void onPreExecute(){
-            super.onPreExecute();
-            Toast.makeText(CheckOutForm.this, "Data is downloading", Toast.LENGTH_SHORT).show();
-        }
+    private class updateTicketStatus extends AsyncTask<Void, Void, Void>{
 
         @Override
         protected Void doInBackground(Void... voids) {
-            WebServiceConnect webCon = WebServiceConnect.getInstance();
-            String jsonStr = webCon.getData("https://ccuresearch.coastal.edu/bcmodlin/CSCI490/GetBillInfo.php");
-            Log.e(TAG, "Response from url: " + jsonStr);
-
-            if (jsonStr != null) {
-                try {
-                    JSONObject stud = new JSONObject(jsonStr);
-
-                    fName = stud.getString("fName");
-                    lName = stud.getString("lName");
-                    email = stud.getString("Email");
-
-                } catch (final JSONException e) {
-                    Log.e(TAG, "JSON parsing error: " + e.getMessage());
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(getApplicationContext(), "Couldn't get json from server.  Check log for errors", Toast.LENGTH_LONG).show();
-                        }
-                    });
-                }
-            } else {
-                Log.e(TAG, "Couldn't get json from server.");
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getApplicationContext(), "Couldn't get json from server.  Check log for errors", Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
+            WebServiceConnect webConn = WebServiceConnect.getInstance();
+            webConn.getData("https://ccuresearch.coastal.edu/bcmodlin/CSCI_490/index.php?run=updateTicketStatus&param=");
             return null;
         }
-
-        @Override
-        protected void onPostExecute(Void result){
-            super.onPostExecute(result);
-
-            firstNameEdit.setText(fName);
-            lastNameEdit.setText(lName);
-            emailAddEdit.setText(email);
-        }
     }
-
 }

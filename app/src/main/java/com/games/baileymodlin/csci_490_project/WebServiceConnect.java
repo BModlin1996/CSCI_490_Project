@@ -7,18 +7,25 @@
 package com.games.baileymodlin.csci_490_project;
 
 import java.io.BufferedInputStream;
+<<<<<<< HEAD
+=======
 
 import java.io.BufferedOutputStream;
+>>>>>>> origin/master
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+<<<<<<< HEAD
+=======
 import javax.net.ssl.HttpsURLConnection;
 
 import java.io.OutputStream;
+>>>>>>> origin/master
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import javax.net.ssl.HttpsURLConnection;
 
 
 
@@ -33,21 +40,20 @@ public class WebServiceConnect {
      * WebServiceConnect(String) - Makes a connection to the webservice and retrieves the queried information
      *
      */
-    private WebServiceConnect(){
+    private WebServiceConnect() {
 
     }
 
-
-    public static  WebServiceConnect getInstance(){
+    public static WebServiceConnect getInstance(){
         return webServiceConnect;
     }
 
+    public String getData(String link) {
 
-    public String getData(String address) {
 
         try {
             //The URL to the webserver
-            URL url = new URL(address);
+            URL url = new URL(link);
             //Make a connection to the webserver
             HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
@@ -93,5 +99,13 @@ public class WebServiceConnect {
         }
 
         return stringBuilder.toString();
+    }
+
+    /**
+     * getDataIn() - Gets the value of dataIn
+     * @return - The string value of dataIn
+     */
+    public String getDataIn(){
+        return dataIn;
     }
 }
