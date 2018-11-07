@@ -69,8 +69,8 @@ public class LoginActivity extends AppCompatActivity {
                 Student stu = Student.getInstance();
 
                 if (email.equals(stu.getEmailAdd()) && password.equals(stu.getPassword())) {
-
                     Intent intent = new Intent(LoginActivity.this, UserActivity.class);
+                    intent.putExtra("ccuID", stu.getStudId());
                     LoginActivity.this.startActivity(intent);
                 }
 
@@ -97,6 +97,7 @@ public class LoginActivity extends AppCompatActivity {
                 changeActivity(0);
             }
         });
+        new GetLoginInfo().execute();
 
     }
 
@@ -115,7 +116,7 @@ public class LoginActivity extends AppCompatActivity {
                 break;
         }
     }
-    private class GetBillInfo extends AsyncTask<Void, Void, Void>{
+    private class GetLoginInfo extends AsyncTask<Void, Void, Void>{
 
         private String email;
         private String password;
@@ -129,7 +130,7 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             WebServiceConnect webCon = WebServiceConnect.getInstance();
-            String jsonStr = webCon.getData("https://ccuresearch.coastal.edu/mykistner/CSCI490/Login.php");
+            String jsonStr = webCon.getData("https://ccuresearch.coastal.edu/mykistner/490project/Login.php");
             Log.e(TAG, "Response from url: " + jsonStr);
 
             if (jsonStr != null) {
